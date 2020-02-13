@@ -1,9 +1,9 @@
-package config
+package parse
 
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"os/user"

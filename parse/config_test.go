@@ -1,4 +1,4 @@
-package config
+package parse
 
 import (
 	"fmt"
@@ -19,21 +19,21 @@ type TomlParams struct {
 }
 
 func TestYAML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config")
+	con := New().SetEnv("test").SetConfigFilepathDir("../config")
 	u := &YmlParams{}
 	con.ParseFile(u)
 	fmt.Printf("%#v", u.User)
 }
 
 func TestYAML1(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("yaml")
+	con := New().SetEnv("test").SetConfigFilepathDir("../config").SetConfigFiletype("yaml")
 	u := &YmlParams{}
 	con.ParseFile(u)
 	fmt.Printf("%#v", u.User)
 }
 
 func TestTOML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("toml")
+	con := New().SetEnv("test").SetConfigFilepathDir("../config").SetConfigFiletype("toml")
 	u := &TomlParams{}
 	con.ParseFile(u)
 	fmt.Printf("%#v", u.Owner.User)

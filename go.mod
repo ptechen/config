@@ -1,4 +1,4 @@
-module config
+module parse
 
 go 1.13
 

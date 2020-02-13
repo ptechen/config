@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -22,19 +21,25 @@ func TestYAML(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFilepathDir("config")
 	u := &YmlParams{}
 	con.ParseFile(u)
-	fmt.Printf("%#v", u.User)
+	if u.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
 }
 
 func TestYAML1(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("yaml")
 	u := &YmlParams{}
 	con.ParseFile(u)
-	fmt.Printf("%#v", u.User)
+	if u.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
 }
 
 func TestTOML(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("toml")
 	u := &TomlParams{}
 	con.ParseFile(u)
-	fmt.Printf("%#v", u.Owner.User)
+	if u.Owner.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
 }

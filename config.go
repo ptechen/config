@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -15,6 +15,7 @@ type Config struct {
 	Env           string `json:"env"` // dev、test、prod
 	ConfigFileDir string `json:"config_file_dir"` // config
 	FileType string `json:"file_type"` // yml、toml
+	FileName string `json:"file_name"` // config
 }
 
 
@@ -23,6 +24,7 @@ func New() *Config {
 		Env: "dev",  // 默认dev
 		ConfigFileDir: "config", // 默认 config
 		FileType: "yml", // 默认 yml
+		FileName: "config", // 默认 config
 	}
 }
 
@@ -37,6 +39,11 @@ func (p *Config) SetConfigFilepathDir(filepathDir string) *Config {
 }
 
 func (p *Config) SetConfigFiletype(fileType string) *Config {
+	p.FileType = fileType
+	return p
+}
+
+func (p *Config) SetConfigFileName(fileType string) *Config {
 	p.FileType = fileType
 	return p
 }
@@ -102,9 +109,9 @@ func parseYAML(filename string, res interface{}) error {
 
 func (p *Config) filename() string {
 	if p.FileType == "yml" || p.FileType == "yaml"{
-		return fmt.Sprintf("%s/%s.%s", p.ConfigFileDir, p.Env, p.FileType)
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
 	} else if p.FileType == "toml" {
-		return fmt.Sprintf("%s/%s.%s", p.ConfigFileDir, p.Env, p.FileType)
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
 	} else {
 		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
 	}
@@ -147,10 +154,7 @@ func (p *Config)YAML(filename string, res interface{}) {
 // An error will be shown to the user via panic with the error message.
 // Error may occur when the file doesn't exists or is not formatted correctly.
 //
-// Note: if the char '~' passed as "filename" then it tries to load and return
-// the configuration from the $home_directory + iris.tml,
-// see `WithGlobalConfiguration` for more information.
-//
+
 
 func (p *Config)TOML(filename string, res interface{}){
 
@@ -179,9 +183,5 @@ func (p *Config)TOML(filename string, res interface{}){
 	if _, err := toml.Decode(string(data), res); err != nil {
 		panic(err)
 	}
-	// Author's notes:
-	// The toml's 'usual thing' for key naming is: the_config_key instead of TheConfigKey
-	// but I am always prefer to use the specific programming language's syntax
-	// and the original configuration name fields for external configuration files
-	// so we do 'toml: "TheConfigKeySameAsTheConfigField" instead.
+
 }

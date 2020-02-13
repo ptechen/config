@@ -11,6 +11,8 @@ import (
 	"runtime"
 )
 
+const globalConfigurationKeyword = "~"
+
 type Config struct {
 	Env           string `json:"env"` // dev、test、prod
 	ConfigFileDir string `json:"config_file_dir"` // config
@@ -48,8 +50,82 @@ func (p *Config) SetConfigFileName(fileType string) *Config {
 	return p
 }
 
-const globalConfigurationKeyword = "~"
+func (p *Config) ParseFile(res interface{}){
+	filename := p.filename()
+	if p.FileType == "yml" || p.FileType == "yaml" {
+		p.YAML(filename, res)
+	} else if p.FileType == "toml" {
+		p.TOML(filename, res)
+	} else {
+		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
+	}
+}
 
+func (p *Config)YAML(filename string, res interface{}) {
+
+	// check for globe configuration file and use that, otherwise
+	// return the default configuration if file doesn't exist.
+	if filename == globalConfigurationKeyword {
+		filename = homeConfigurationFilename(".yml")
+		if _, err := os.Stat(filename); os.IsNotExist(err) {
+			panic("default configuration file '" + filename + "' does not exist")
+		}
+	}
+
+	err := parseYAML(filename, res)
+	if err != nil {
+		panic(err)
+	}
+}
+
+// TOML reads Configuration from a toml-compatible document file.
+// Read more about toml's implementation at:
+// https://github.com/toml-lang/toml
+//
+//
+// Accepts the absolute path of the configuration file.
+// An error will be shown to the user via panic with the error message.
+// Error may occur when the file doesn't exists or is not formatted correctly.
+//
+
+
+func (p *Config)TOML(filename string, res interface{}){
+
+	if filename == globalConfigurationKeyword {
+		filename = homeConfigurationFilename(".tml")
+		if _, err := os.Stat(filename); os.IsNotExist(err) {
+			panic(err)
+		}
+	}
+
+	// get the abs
+	// which will try to find the 'filename' from current workind dir too.
+	tomlAbsPath, err := filepath.Abs(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	// read the raw contents of the file
+	data, err := ioutil.ReadFile(tomlAbsPath)
+	if err != nil {
+		panic(err)
+	}
+	// put the file's contents as toml to the default configuration(c)
+	if _, err := toml.Decode(string(data), res); err != nil {
+		panic(err)
+	}
+
+}
+
+func (p *Config) filename() string {
+	if p.FileType == "yml" || p.FileType == "yaml"{
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
+	} else if p.FileType == "toml" {
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
+	} else {
+		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
+	}
+}
 
 func homeConfigurationFilename(ext string) string {
 	return filepath.Join(homeDir(), ext)
@@ -107,81 +183,7 @@ func parseYAML(filename string, res interface{}) error {
 // Error may occur when the cfg.yml doesn't exists or is not formatted correctly.
 //
 
-func (p *Config) filename() string {
-	if p.FileType == "yml" || p.FileType == "yaml"{
-		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
-	} else if p.FileType == "toml" {
-		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
-	} else {
-		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
-	}
-}
-
-func (p *Config) ParseFile(res interface{}){
-	filename := p.filename()
-	if p.FileType == "yml" || p.FileType == "yaml" {
-		p.YAML(filename, res)
-	} else if p.FileType == "toml" {
-		p.TOML(filename, res)
-	} else {
-		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
-	}
-}
-
-func (p *Config)YAML(filename string, res interface{}) {
-
-	// check for globe configuration file and use that, otherwise
-	// return the default configuration if file doesn't exist.
-	if filename == globalConfigurationKeyword {
-		filename = homeConfigurationFilename(".yml")
-		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			panic("default configuration file '" + filename + "' does not exist")
-		}
-	}
-
-	err := parseYAML(filename, res)
-	if err != nil {
-		panic(err)
-	}
-}
-
-// TOML reads Configuration from a toml-compatible document file.
-// Read more about toml's implementation at:
-// https://github.com/toml-lang/toml
-//
-//
-// Accepts the absolute path of the configuration file.
-// An error will be shown to the user via panic with the error message.
-// Error may occur when the file doesn't exists or is not formatted correctly.
-//
 
 
-func (p *Config)TOML(filename string, res interface{}){
 
-	// check for globe configuration file and use that, otherwise
-	// return the default configuration if file doesn't exist.
-	if filename == globalConfigurationKeyword {
-		filename = homeConfigurationFilename(".tml")
-		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			panic("default configuration file '" + filename + "' does not exist")
-		}
-	}
 
-	// get the abs
-	// which will try to find the 'filename' from current workind dir too.
-	tomlAbsPath, err := filepath.Abs(filename)
-	if err != nil {
-		panic(err)
-	}
-
-	// read the raw contents of the file
-	data, err := ioutil.ReadFile(tomlAbsPath)
-	if err != nil {
-		panic(err)
-	}
-	// put the file's contents as toml to the default configuration(c)
-	if _, err := toml.Decode(string(data), res); err != nil {
-		panic(err)
-	}
-
-}

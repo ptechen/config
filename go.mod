@@ -1,4 +1,4 @@
-module parse
+module github.com/ptechen/config
 
 go 1.13
 

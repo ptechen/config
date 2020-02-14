@@ -1,6 +1,7 @@
 package config
 
 import (
+	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"gopkg.in/yaml.v2"
@@ -16,17 +17,33 @@ const globalConfigurationKeyword = "~"
 type Config struct {
 	Env           string `json:"env"` // dev、test、prod
 	ConfigFileDir string `json:"config_file_dir"` // config
-	FileType string `json:"file_type"` // yml、toml
-	FileName string `json:"file_name"` // config
+	ConfigFileType string `json:"file_type"` // yml、toml
+	ConfigFileName string `json:"file_name"` // config
 }
 
+func Flag() *Config {
+	var env string
+	var configFileDir string
+	var configFileType string
+	var configFileName string
+	flag.StringVar(&env, "e", "dev", "环境")
+	flag.StringVar(&configFileDir, "cfd", "config", "配置文件目录")
+	flag.StringVar(&configFileType, "cft", "yml", "配置文件后缀名")
+	flag.StringVar(&configFileName, "cfn", "config", "配置文件名")
+	return &Config{
+		Env: env,  // 默认dev
+		ConfigFileDir: configFileDir, // 默认 config
+		ConfigFileType: configFileType, // 默认 yml
+		ConfigFileName: configFileName, // 默认 config
+	}
+}
 
 func New() *Config {
 	return &Config{
 		Env: "dev",  // 默认dev
 		ConfigFileDir: "config", // 默认 config
-		FileType: "yml", // 默认 yml
-		FileName: "config", // 默认 config
+		ConfigFileType: "yml", // 默认 yml
+		ConfigFileName: "config", // 默认 config
 	}
 }
 
@@ -41,20 +58,20 @@ func (p *Config) SetConfigFilepathDir(filepathDir string) *Config {
 }
 
 func (p *Config) SetConfigFiletype(fileType string) *Config {
-	p.FileType = fileType
+	p.ConfigFileType = fileType
 	return p
 }
 
 func (p *Config) SetConfigFileName(fileType string) *Config {
-	p.FileType = fileType
+	p.ConfigFileType = fileType
 	return p
 }
 
 func (p *Config) ParseFile(res interface{}){
 	filename := p.filename()
-	if p.FileType == "yml" || p.FileType == "yaml" {
+	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml" {
 		p.YAML(filename, res)
-	} else if p.FileType == "toml" {
+	} else if p.ConfigFileType == "toml" {
 		p.TOML(filename, res)
 	} else {
 		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
@@ -94,7 +111,7 @@ func (p *Config)TOML(filename string, res interface{}){
 	if filename == globalConfigurationKeyword {
 		filename = homeConfigurationFilename(".tml")
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			panic(err)
+			panic("default configuration file '" + filename + "' does not exist")
 		}
 	}
 
@@ -118,10 +135,10 @@ func (p *Config)TOML(filename string, res interface{}){
 }
 
 func (p *Config) filename() string {
-	if p.FileType == "yml" || p.FileType == "yaml"{
-		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
-	} else if p.FileType == "toml" {
-		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.FileName, p.FileType)
+	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml"{
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.ConfigFileName, p.ConfigFileType)
+	} else if p.ConfigFileType == "toml" {
+		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.ConfigFileName, p.ConfigFileType)
 	} else {
 		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
 	}

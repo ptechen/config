@@ -18,7 +18,7 @@ type TomlParams struct {
 }
 
 func TestYAML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config")
+	con := Flag().SetEnv("test").SetConfigFilepathDir("config")
 	u := &YmlParams{}
 	con.ParseFile(u)
 	if u.User != "taochen" {
@@ -28,6 +28,15 @@ func TestYAML(t *testing.T) {
 
 func TestYAML1(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("yaml")
+	u := &YmlParams{}
+	con.ParseFile(u)
+	if u.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
+}
+
+func TestYAML2(t *testing.T) {
+	con := Flag()
 	u := &YmlParams{}
 	con.ParseFile(u)
 	if u.User != "taochen" {

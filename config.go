@@ -26,10 +26,10 @@ func Flag() *Config {
 	var configFileDir string
 	var configFileType string
 	var configFileName string
-	flag.StringVar(&env, "e", "dev", "环境")
-	flag.StringVar(&configFileDir, "cfd", "config", "配置文件目录")
-	flag.StringVar(&configFileType, "cft", "yml", "配置文件后缀名")
-	flag.StringVar(&configFileName, "cfn", "config", "配置文件名")
+	flag.StringVar(&env, "e", "dev", "Operating environment")
+	flag.StringVar(&configFileDir, "cfd", "config", "Configuration file directory")
+	flag.StringVar(&configFileType, "cft", "yml", "Configuration file suffix")
+	flag.StringVar(&configFileName, "cfn", "config", "Configuration file name")
 	flag.Parse()
 	return &Config{
 		Env: env,  // 默认dev

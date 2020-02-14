@@ -14,7 +14,6 @@ type TomlParams struct {
 		User string    `json:"user"`
 		Dob  time.Time `json:"dob"`
 	} `json:"owner"`
-
 }
 
 func TestYAML(t *testing.T) {

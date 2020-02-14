@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
@@ -75,7 +76,7 @@ func (p *Config) ParseFile(res interface{}){
 	} else if p.ConfigFileType == "toml" {
 		p.TOML(filename, res)
 	} else {
-		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
+		panic(errors.New("Currently only yml and toml file types are supported."))
 	}
 }
 
@@ -86,7 +87,7 @@ func (p *Config)YAML(filename string, res interface{}) {
 	if filename == globalConfigurationKeyword {
 		filename = homeConfigurationFilename(".yml")
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			panic("default configuration file '" + filename + "' does not exist")
+			panic(errors.New("default configuration file '" + filename + "' does not exist"))
 		}
 	}
 
@@ -112,14 +113,13 @@ func (p *Config)TOML(filename string, res interface{}){
 	if filename == globalConfigurationKeyword {
 		filename = homeConfigurationFilename(".tml")
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			panic("default configuration file '" + filename + "' does not exist")
+			panic(errors.New("default configuration file '" + filename + "' does not exist"))
 		}
 	}
 
 	// get the abs
 	// which will try to find the 'filename' from current workind dir too.
-	tomlAbsPath, err := filepath.Abs(filename)
-	if err != nil {
+	tomlAbsPath, err := filepath.Abs(filename); if err != nil {
 		panic(err)
 	}
 
@@ -141,7 +141,7 @@ func (p *Config) filename() string {
 	} else if p.ConfigFileType == "toml" {
 		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.ConfigFileName, p.ConfigFileType)
 	} else {
-		panic(fmt.Errorf("Currently only yml and toml file types are supported."))
+		panic(errors.New("Currently only yml and toml file types are supported."))
 	}
 }
 

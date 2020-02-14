@@ -30,6 +30,7 @@ func Flag() *Config {
 	flag.StringVar(&configFileDir, "cfd", "config", "配置文件目录")
 	flag.StringVar(&configFileType, "cft", "yml", "配置文件后缀名")
 	flag.StringVar(&configFileName, "cfn", "config", "配置文件名")
+	flag.Parse()
 	return &Config{
 		Env: env,  // 默认dev
 		ConfigFileDir: configFileDir, // 默认 config
@@ -52,12 +53,12 @@ func (p *Config) SetEnv(env string) *Config {
 	return p
 }
 
-func (p *Config) SetConfigFilepathDir(filepathDir string) *Config {
+func (p *Config) SetConfigFileDir(filepathDir string) *Config {
 	p.ConfigFileDir = filepathDir
 	return p
 }
 
-func (p *Config) SetConfigFiletype(fileType string) *Config {
+func (p *Config) SetConfigFileType(fileType string) *Config {
 	p.ConfigFileType = fileType
 	return p
 }

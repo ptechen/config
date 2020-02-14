@@ -18,7 +18,7 @@ type TomlParams struct {
 }
 
 func TestYAML(t *testing.T) {
-	con := Flag().SetEnv("test").SetConfigFilepathDir("config")
+	con := New().SetEnv("test").SetConfigFileDir("config")
 	u := &YmlParams{}
 	con.ParseFile(u)
 	if u.User != "taochen" {
@@ -27,16 +27,7 @@ func TestYAML(t *testing.T) {
 }
 
 func TestYAML1(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("yaml")
-	u := &YmlParams{}
-	con.ParseFile(u)
-	if u.User != "taochen" {
-		t.Errorf("%#v", u)
-	}
-}
-
-func TestYAML2(t *testing.T) {
-	con := Flag()
+	con := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("yaml")
 	u := &YmlParams{}
 	con.ParseFile(u)
 	if u.User != "taochen" {
@@ -45,10 +36,19 @@ func TestYAML2(t *testing.T) {
 }
 
 func TestTOML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFilepathDir("config").SetConfigFiletype("toml")
+	con := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("toml")
 	u := &TomlParams{}
 	con.ParseFile(u)
 	if u.Owner.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
+}
+
+func TestYAML2(t *testing.T) {
+	con := Flag().SetEnv("test")
+	u := &YmlParams{}
+	con.ParseFile(u)
+	if u.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
 }

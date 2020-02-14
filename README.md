@@ -13,7 +13,8 @@ example:
     }
 
     func main()  {
-	    con := config.New().SetEnv("test").SetConfigFilepathDir("config")
+        // config.Flge()
+	    con := config.New().SetEnv("test").SetConfigFileDir("config")
 	    u := &YmlParams{}
 	    con.ParseFile(u)
 	    fmt.Printf("%#v", u.User)

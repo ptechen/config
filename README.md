@@ -1,4 +1,7 @@
 # Parse the configuration file. Currently only yml files and toml files are supported.
+
+![](https://travis-ci.com/ptechen/config.svg?branch=master)
+
 example:
 
     package main

@@ -10,7 +10,7 @@ type YmlParams struct {
 }
 
 type TomlParams struct {
-	Owner struct{
+	Owner struct {
 		User string    `json:"user"`
 		Dob  time.Time `json:"dob"`
 	} `json:"owner"`

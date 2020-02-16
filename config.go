@@ -16,10 +16,10 @@ import (
 const globalConfigurationKeyword = "~"
 
 type Config struct {
-	Env           string `json:"env"` // dev、test、prod
-	ConfigFileDir string `json:"config_file_dir"` // config
-	ConfigFileType string `json:"file_type"` // yml、toml
-	ConfigFileName string `json:"file_name"` // config
+	Env            string `json:"env"`             // dev、test、prod
+	ConfigFileDir  string `json:"config_file_dir"` // config
+	ConfigFileType string `json:"file_type"`       // yml、toml
+	ConfigFileName string `json:"file_name"`       // config
 }
 
 func Flag() *Config {
@@ -33,8 +33,8 @@ func Flag() *Config {
 	flag.StringVar(&configFileName, "cfn", "config", "Configuration file name")
 	flag.Parse()
 	return &Config{
-		Env: env,  // 默认dev
-		ConfigFileDir: configFileDir, // 默认 config
+		Env:            env,            // 默认dev
+		ConfigFileDir:  configFileDir,  // 默认 config
 		ConfigFileType: configFileType, // 默认 yml
 		ConfigFileName: configFileName, // 默认 config
 	}
@@ -42,9 +42,9 @@ func Flag() *Config {
 
 func New() *Config {
 	return &Config{
-		Env: "dev",  // 默认dev
-		ConfigFileDir: "config", // 默认 config
-		ConfigFileType: "yml", // 默认 yml
+		Env:            "dev",    // 默认dev
+		ConfigFileDir:  "config", // 默认 config
+		ConfigFileType: "yml",    // 默认 yml
 		ConfigFileName: "config", // 默认 config
 	}
 }
@@ -69,7 +69,7 @@ func (p *Config) SetConfigFileName(fileType string) *Config {
 	return p
 }
 
-func (p *Config) ParseFile(res interface{}){
+func (p *Config) ParseFile(res interface{}) {
 	filename := p.filename()
 	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml" {
 		p.YAML(filename, res)
@@ -80,7 +80,7 @@ func (p *Config) ParseFile(res interface{}){
 	}
 }
 
-func (p *Config)YAML(filename string, res interface{}) {
+func (p *Config) YAML(filename string, res interface{}) {
 
 	// check for globe configuration file and use that, otherwise
 	// return the default configuration if file doesn't exist.
@@ -107,8 +107,7 @@ func (p *Config)YAML(filename string, res interface{}) {
 // Error may occur when the file doesn't exists or is not formatted correctly.
 //
 
-
-func (p *Config)TOML(filename string, res interface{}){
+func (p *Config) TOML(filename string, res interface{}) {
 
 	if filename == globalConfigurationKeyword {
 		filename = homeConfigurationFilename(".tml")
@@ -119,7 +118,8 @@ func (p *Config)TOML(filename string, res interface{}){
 
 	// get the abs
 	// which will try to find the 'filename' from current workind dir too.
-	tomlAbsPath, err := filepath.Abs(filename); if err != nil {
+	tomlAbsPath, err := filepath.Abs(filename)
+	if err != nil {
 		panic(err)
 	}
 
@@ -136,7 +136,7 @@ func (p *Config)TOML(filename string, res interface{}){
 }
 
 func (p *Config) filename() string {
-	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml"{
+	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml" {
 		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.ConfigFileName, p.ConfigFileType)
 	} else if p.ConfigFileType == "toml" {
 		return fmt.Sprintf("%s/%s/%s.%s", p.ConfigFileDir, p.Env, p.ConfigFileName, p.ConfigFileType)
@@ -200,8 +200,3 @@ func parseYAML(filename string, res interface{}) error {
 // An error will be shown to the user via panic with the error message.
 // Error may occur when the cfg.yml doesn't exists or is not formatted correctly.
 //
-
-
-
-
-

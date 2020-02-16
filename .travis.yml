@@ -8,3 +8,8 @@ matrix:
 script:
   - go test -v -race -bench . -benchmem ./...
   - go test -v -tags binary_log -race -bench . -benchmem ./...
+
+secure: "iC14/hUgaQeUfYmP11kjJr7bsARjIP5eEoiZYYpLiWWS0AWNiZo4fVf7av5M/EToNcuvjj8Q4waYnWdM29cEZhtbzZx88QzBEnHdVsLRVBcYwTQkAijQxaeRktP5KTVbSmaPaRpfUS2W6DgYZT7n6eIjkGn+W/ZZ0onK4wyhr3GU5GdF2P3GMwiGRKKr+dl9hk/lvRvZHWZQTqjnv9FjuZbozTVOpiZ9KlIHA/HoDu1vWsNLHjMQbB7xWUHcsGHwKdf3ikpSfFRNFD6uIQC9R5F1ofDXRU2wH9q2WvvoJWQw3ieC+Wbi1yWKTLr0wN4z4F+nz4jfgIHXUFElouSJSv903xszMVh59DLWS9tCFMkCScV0PIYrD0bU8EfQn208hrCKufFwwfEDIq9n7j0YcvNhYrBPMIQ2zL1CKGeyb5Ucm5Fgsuz3w1iY045eFcpTd2zUyzQxy6K8iTNuHxJit8uXYSI9GagsxvdqWvveGyxEP8UjmWMmQ/n3iyajyPtqSTZVYefxygpAjMjTTv0FaNQKzMATE7H8UYHOGZKf6JQs8Atsdo5QaKt/V7d1htTks/YWnE9DQnbR6oqCroQC9stqMM7nFApKwho5eg3ZQi74NCAnhXp7K00zaUg2N8Ck5j+ZG2pR/YHSxtknx6HvVj3NOFAhtOVFJVaHOyqfIRw="
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

@@ -16,7 +16,56 @@ type TomlParams struct {
 	} `json:"owner"`
 }
 
-func TestYAML(t *testing.T) {
+func TestNew(t *testing.T) {
+	con := New()
+	if con.Env == "dev" && con.ConfigFileName == "config" && con.ConfigFileDir == "config" && con.ConfigFileType == "yml" {
+	} else {
+		t.Errorf("%#v", con)
+	}
+}
+
+func TestFlag(t *testing.T) {
+	con := Flag().SetEnv("test")
+	u := &YmlParams{}
+	con.ParseFile(u)
+	if u.User != "taochen" {
+		t.Errorf("%#v", u)
+	}
+}
+
+func TestConfig_SetConfigFileDir(t *testing.T) {
+	con := New()
+	con.SetConfigFileDir("test")
+	if con.ConfigFileDir != "test" {
+		t.Errorf("%#v", con)
+	}
+}
+
+func TestConfig_SetConfigFileName(t *testing.T) {
+	con := New()
+	con.SetConfigFileName("test")
+	if con.ConfigFileName != "test" {
+		t.Errorf("%#v", con)
+	}
+}
+
+func TestConfig_SetConfigFileType(t *testing.T) {
+	con := New()
+	con.SetConfigFileType("test")
+	if con.ConfigFileType != "test" {
+		t.Errorf("%#v", con)
+	}
+}
+
+func TestConfig_SetEnv(t *testing.T) {
+	con := New()
+	con.SetEnv("test")
+	if con.Env != "test" {
+		t.Errorf("%#v", con)
+	}
+}
+
+func TestConfig_YAML(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFileDir("config")
 	u := &YmlParams{}
 	con.ParseFile(u)
@@ -25,16 +74,7 @@ func TestYAML(t *testing.T) {
 	}
 }
 
-func TestYAML1(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("yaml")
-	u := &YmlParams{}
-	con.ParseFile(u)
-	if u.User != "taochen" {
-		t.Errorf("%#v", u)
-	}
-}
-
-func TestTOML(t *testing.T) {
+func TestConfig_TOML(t *testing.T) {
 	con := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("toml")
 	u := &TomlParams{}
 	con.ParseFile(u)
@@ -43,11 +83,11 @@ func TestTOML(t *testing.T) {
 	}
 }
 
-func TestYAML2(t *testing.T) {
-	con := Flag().SetEnv("test")
-	u := &YmlParams{}
+func TestConfig_ParseFile(t *testing.T) {
+	con := New().SetEnv("test").SetConfigFileType("toml")
+	u := &TomlParams{}
 	con.ParseFile(u)
-	if u.User != "taochen" {
+	if u.Owner.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
 }

@@ -11,6 +11,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"runtime"
+	"sync"
 )
 
 const globalConfigurationKeyword = "~"
@@ -24,6 +25,8 @@ type Config struct {
 	ConfigFileName string `json:"file_name"`       // config
 }
 
+var con *Config
+var once sync.Once
 // Flag are arguments passed from outside the program.
 //
 func Flag() *Config {
@@ -36,23 +39,26 @@ func Flag() *Config {
 	flag.StringVar(&configFileType, "cft", "yml", "Configuration file suffix")
 	flag.StringVar(&configFileName, "cfn", "config", "Configuration file name")
 	flag.Parse()
-	return &Config{
-		Env:            env,            // 默认dev
-		ConfigFileDir:  configFileDir,  // 默认 config
-		ConfigFileType: configFileType, // 默认 yml
-		ConfigFileName: configFileName, // 默认 config
-	}
+	con = New()
+	con.Env = env
+	con.ConfigFileDir = configFileDir
+	con.ConfigFileType = configFileType
+	con.ConfigFileName = configFileName
+	return con
 }
 
 // New the Config structure and set the default values.
 //
 func New() *Config {
-	return &Config{
-		Env:            "dev",    // 默认dev
-		ConfigFileDir:  "config", // 默认 config
-		ConfigFileType: "yml",    // 默认 yml
-		ConfigFileName: "config", // 默认 config
-	}
+	once.Do(func() {
+		con = &Config{
+			Env:            "dev",    // 默认dev
+			ConfigFileDir:  "config", // 默认 config
+			ConfigFileType: "yml",    // 默认 yml
+			ConfigFileName: "config", // 默认 config
+		}
+	})
+	return con
 }
 
 // SetEnv the value of Config.Env.

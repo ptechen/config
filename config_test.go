@@ -43,16 +43,16 @@ func TestConfig_SetConfigFileDir(t *testing.T) {
 
 func TestConfig_SetConfigFileName(t *testing.T) {
 	con := New()
-	con.SetConfigFileName("test")
-	if con.ConfigFileName != "test" {
+	con.SetConfigFileName("config")
+	if con.ConfigFileName != "config" {
 		t.Errorf("%#v", con)
 	}
 }
 
 func TestConfig_SetConfigFileType(t *testing.T) {
 	con := New()
-	con.SetConfigFileType("test")
-	if con.ConfigFileType != "test" {
+	con.SetConfigFileType("yml")
+	if con.ConfigFileType != "yml" {
 		t.Errorf("%#v", con)
 	}
 }
@@ -91,3 +91,4 @@ func TestConfig_ParseFile(t *testing.T) {
 		t.Errorf("%#v", u)
 	}
 }
+

@@ -70,8 +70,8 @@ func (p *Config) SetEnv(env string) *Config {
 
 // SetConfigFileDir the value of Config.ConfigFileDir.
 //
-func (p *Config) SetConfigFileDir(filepathDir string) *Config {
-	p.ConfigFileDir = filepathDir
+func (p *Config) SetConfigFileDir(fileDir string) *Config {
+	p.ConfigFileDir = fileDir
 	return p
 }
 

@@ -119,7 +119,6 @@ func (p *Config) YAML(filename string, res interface{}) {
 	}
 }
 
-
 // TOML reads Configuration from a toml-compatible document file.
 // Read more about toml's implementation at:
 // https://github.com/toml-lang/toml
@@ -214,5 +213,3 @@ func parseYAML(filename string, res interface{}) error {
 	}
 	return nil
 }
-
-

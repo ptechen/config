@@ -16,6 +16,7 @@ import (
 const globalConfigurationKeyword = "~"
 
 // 解析配置文件所需要的参数
+
 type Config struct {
 	Env            string `json:"env"`             // dev、test、prod
 	ConfigFileDir  string `json:"config_file_dir"` // config

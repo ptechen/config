@@ -16,6 +16,7 @@ import (
 const globalConfigurationKeyword = "~"
 
 // Config contains the parameters needed to parse the configuration file.
+//
 type Config struct {
 	Env            string `json:"env"`             // dev、test、prod
 	ConfigFileDir  string `json:"config_file_dir"` // config
@@ -24,6 +25,7 @@ type Config struct {
 }
 
 // Flag are arguments passed from outside the program.
+//
 func Flag() *Config {
 	var env string
 	var configFileDir string
@@ -42,7 +44,8 @@ func Flag() *Config {
 	}
 }
 
-// New: Initialize the Config structure and set the default values.
+// New the Config structure and set the default values.
+//
 func New() *Config {
 	return &Config{
 		Env:            "dev",    // 默认dev
@@ -52,32 +55,36 @@ func New() *Config {
 	}
 }
 
-// SetEnv: Set the value of Config.Env.
+// SetEnv the value of Config.Env.
+//
 func (p *Config) SetEnv(env string) *Config {
 	p.Env = env
 	return p
 }
 
-// SetConfigFileDir: Set the value of Config.ConfigFileDir.
-
+// SetConfigFileDir the value of Config.ConfigFileDir.
+//
 func (p *Config) SetConfigFileDir(filepathDir string) *Config {
 	p.ConfigFileDir = filepathDir
 	return p
 }
 
-// SetConfigFileType: Set the value of Config.ConfigFileType.
+// SetConfigFileType the value of Config.ConfigFileType.
+//
 func (p *Config) SetConfigFileType(fileType string) *Config {
 	p.ConfigFileType = fileType
 	return p
 }
 
-// SetConfigFileName: Set the value of Config.ConfigFileName.
+// SetConfigFileName the value of Config.ConfigFileName.
+//
 func (p *Config) SetConfigFileName(fileName string) *Config {
 	p.ConfigFileName = fileName
 	return p
 }
 
-// ParseFile: Parse the configuration file.
+// ParseFile is the method to parse the configuration file.
+//
 func (p *Config) ParseFile(res interface{}) {
 	filename := p.filename()
 	if p.ConfigFileType == "yml" || p.ConfigFileType == "yaml" {
@@ -89,7 +96,12 @@ func (p *Config) ParseFile(res interface{}) {
 	}
 }
 
-// YAML: Parse the yml format configuration file.
+// YAML reads Configuration from a configuration.yml file.
+//
+// Accepts the absolute path of the cfg.yml.
+// An error will be shown to the user via panic with the error message.
+// Error may occur when the cfg.yml doesn't exists or is not formatted correctly.
+//
 func (p *Config) YAML(filename string, res interface{}) {
 
 	// check for globe configuration file and use that, otherwise
@@ -107,15 +119,15 @@ func (p *Config) YAML(filename string, res interface{}) {
 	}
 }
 
-// TOML: Parse a toml format configuration file.
+
 // TOML reads Configuration from a toml-compatible document file.
 // Read more about toml's implementation at:
 // https://github.com/toml-lang/toml
 //
-//
 // Accepts the absolute path of the configuration file.
 // An error will be shown to the user via panic with the error message.
 // Error may occur when the file doesn't exists or is not formatted correctly.
+//
 func (p *Config) TOML(filename string, res interface{}) {
 
 	if filename == globalConfigurationKeyword {
@@ -203,9 +215,4 @@ func parseYAML(filename string, res interface{}) error {
 	return nil
 }
 
-// YAML reads Configuration from a configuration.yml file.
-//
-// Accepts the absolute path of the cfg.yml.
-// An error will be shown to the user via panic with the error message.
-// Error may occur when the cfg.yml doesn't exists or is not formatted correctly.
-//
+

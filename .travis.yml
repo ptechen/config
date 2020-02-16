@@ -6,6 +6,7 @@ matrix:
   allow_failures:
     - go: "master"
 script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic
   - go test -v -race -bench . -benchmem ./...
   - go test -v -tags binary_log -race -bench . -benchmem ./...
 

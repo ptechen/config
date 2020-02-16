@@ -92,3 +92,56 @@ func TestConfig_ParseFile(t *testing.T) {
 	}
 }
 
+func BenchmarkNew(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		New()
+	}
+}
+
+func BenchmarkConfig_SetEnv(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		New().SetEnv("test")
+	}
+}
+
+func BenchmarkConfig_SetConfigFileDir(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		New().SetConfigFileDir("config")
+	}
+}
+
+func BenchmarkConfig_SetConfigFileName(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		New().SetConfigFileName("config")
+	}
+}
+
+func BenchmarkConfig_SetConfigFileType(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		New().SetConfigFileType("yml")
+	}
+}
+
+func BenchmarkConfig_ParseFile(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		u := &YmlParams{}
+		con := New().SetEnv("test")
+		con.ParseFile(u)
+	}
+}
+
+func BenchmarkConfig_YAML(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		u := &YmlParams{}
+		con := New().SetEnv("test")
+		con.YAML("config/test/config.yml", u)
+	}
+}
+
+func BenchmarkConfig_TOML(b *testing.B) {
+	for i := 0; i < b.N; i ++ {
+		u := &TomlParams{}
+		con := New().SetEnv("test")
+		con.TOML("config/test/config.toml", u)
+	}
+}

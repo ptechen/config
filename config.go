@@ -15,7 +15,7 @@ import (
 
 const globalConfigurationKeyword = "~"
 
-// 解析配置文件所需要的参数
+// The parameters needed to parse the configuration file.
 
 type Config struct {
 	Env            string `json:"env"`             // dev、test、prod
@@ -23,6 +23,8 @@ type Config struct {
 	ConfigFileType string `json:"file_type"`       // yml、toml
 	ConfigFileName string `json:"file_name"`       // config
 }
+
+// The parameters required for parsing the configuration file are obtained through external parameter passing.
 
 func Flag() *Config {
 	var env string
@@ -42,6 +44,8 @@ func Flag() *Config {
 	}
 }
 
+// Initialize the Config structure and set the default values.
+
 func New() *Config {
 	return &Config{
 		Env:            "dev",    // 默认dev
@@ -51,25 +55,35 @@ func New() *Config {
 	}
 }
 
+// Set the value of Config.Env.
+
 func (p *Config) SetEnv(env string) *Config {
 	p.Env = env
 	return p
 }
+
+// Set the value of Config.ConfigFileDir.
 
 func (p *Config) SetConfigFileDir(filepathDir string) *Config {
 	p.ConfigFileDir = filepathDir
 	return p
 }
 
+// Set the value of Config.ConfigFileType.
+
 func (p *Config) SetConfigFileType(fileType string) *Config {
 	p.ConfigFileType = fileType
 	return p
 }
 
-func (p *Config) SetConfigFileName(fileType string) *Config {
-	p.ConfigFileType = fileType
+// Set the value of Config.ConfigFileName.
+
+func (p *Config) SetConfigFileName(fileName string) *Config {
+	p.ConfigFileName = fileName
 	return p
 }
+
+// Parse the configuration file.
 
 func (p *Config) ParseFile(res interface{}) {
 	filename := p.filename()
@@ -81,6 +95,8 @@ func (p *Config) ParseFile(res interface{}) {
 		panic(errors.New("Currently only yml and toml file types are supported."))
 	}
 }
+
+// Parse the yml format configuration file.
 
 func (p *Config) YAML(filename string, res interface{}) {
 
@@ -99,6 +115,7 @@ func (p *Config) YAML(filename string, res interface{}) {
 	}
 }
 
+// Parse a toml format configuration file.
 // TOML reads Configuration from a toml-compatible document file.
 // Read more about toml's implementation at:
 // https://github.com/toml-lang/toml

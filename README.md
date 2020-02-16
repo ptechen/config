@@ -3,7 +3,7 @@
 [![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/ptechen/config)
 [![Build Status](https://travis-ci.com/ptechen/config.svg?branch=master)](https://travis-ci.com/ptechen/config)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ptechen/config)](https://goreportcard.com/report/github.com/ptechen/config)
-[![Coverage](http://gocover.io/_badge/github.com/ptechen/config)](http://gocover.io/github.com/ptechen/config)
+[![codecov](https://codecov.io/gh/ptechen/config/branch/master/graph/badge.svg)](https://codecov.io/gh/ptechen/config)
 
 example:
 

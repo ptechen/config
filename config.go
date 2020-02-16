@@ -15,7 +15,7 @@ import (
 
 const globalConfigurationKeyword = "~"
 
-// The parameters needed to parse the configuration file.
+// Config contains the parameters needed to parse the configuration file.
 type Config struct {
 	Env            string `json:"env"`             // dev、test、prod
 	ConfigFileDir  string `json:"config_file_dir"` // config

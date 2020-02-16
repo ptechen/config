@@ -23,7 +23,7 @@ type Config struct {
 	ConfigFileName string `json:"file_name"`       // config
 }
 
-// Flags are arguments passed from outside the program.
+// Flag are arguments passed from outside the program.
 func Flag() *Config {
 	var env string
 	var configFileDir string

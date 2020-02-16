@@ -1,6 +1,7 @@
 # Parse the configuration file. Currently only yml files and toml files are supported.
 
-![](https://travis-ci.com/ptechen/config.svg?branch=master)
+[![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/ptechen/config)
+[![Build Status](https://travis-ci.com/ptechen/config.svg?branch=master)](https://travis-ci.com/ptechen/config)
 
 example:
 

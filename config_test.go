@@ -1,8 +1,8 @@
 package config
 
 import (
+	"fmt"
 	"testing"
-	"time"
 )
 
 type YmlParams struct {
@@ -12,81 +12,80 @@ type YmlParams struct {
 type TomlParams struct {
 	Owner struct {
 		User string    `json:"user"`
-		Dob  time.Time `json:"dob"`
 	} `json:"owner"`
 }
 
 func TestNew(t *testing.T) {
-	con := New()
+	conf := New()
 	if con.Env == "dev" && con.ConfigFileName == "config" && con.ConfigFileDir == "config" && con.ConfigFileType == "yml" {
 	} else {
-		t.Errorf("%#v", con)
+		t.Errorf("%#v", conf)
 	}
 }
 
 func TestFlag(t *testing.T) {
-	con := Flag().SetEnv("test")
+	conf := Flag().SetEnv("test")
 	u := &YmlParams{}
-	con.ParseFile(u)
+	conf.ParseFile(u)
 	if u.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
 }
 
 func TestConfig_SetConfigFileDir(t *testing.T) {
-	con := New()
-	con.SetConfigFileDir("test")
+	conf := New()
+	conf.SetConfigFileDir("test")
 	if con.ConfigFileDir != "test" {
 		t.Errorf("%#v", con)
 	}
 }
 
 func TestConfig_SetConfigFileName(t *testing.T) {
-	con := New()
-	con.SetConfigFileName("config")
+	conf := New()
+	conf.SetConfigFileName("config")
 	if con.ConfigFileName != "config" {
 		t.Errorf("%#v", con)
 	}
 }
 
 func TestConfig_SetConfigFileType(t *testing.T) {
-	con := New()
-	con.SetConfigFileType("yml")
+	conf := New()
+	conf.SetConfigFileType("yml")
 	if con.ConfigFileType != "yml" {
 		t.Errorf("%#v", con)
 	}
 }
 
 func TestConfig_SetEnv(t *testing.T) {
-	con := New()
-	con.SetEnv("test")
+	conf := New()
+	conf.SetEnv("test")
 	if con.Env != "test" {
 		t.Errorf("%#v", con)
 	}
 }
 
 func TestConfig_YAML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFileDir("config")
+	conf := New().SetEnv("test").SetConfigFileDir("config")
 	u := &YmlParams{}
-	con.ParseFile(u)
+	conf.ParseFile(u)
 	if u.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
 }
 
 func TestConfig_TOML(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("toml")
+	conf := New().SetEnv("test").SetConfigFileDir("config").SetConfigFileType("toml")
 	u := &TomlParams{}
-	con.ParseFile(u)
+	conf.ParseFile(u)
 	if u.Owner.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
 }
 
 func TestConfig_ParseFile(t *testing.T) {
-	con := New().SetEnv("test").SetConfigFileType("toml")
+	conf := New().SetEnv("test").SetConfigFileType("toml")
 	u := &TomlParams{}
-	con.ParseFile(u)
+	conf.ParseFile(u)
 	if u.Owner.User != "taochen" {
 		t.Errorf("%#v", u)
 	}
@@ -125,23 +124,68 @@ func BenchmarkConfig_SetConfigFileType(b *testing.B) {
 func BenchmarkConfig_ParseFile(b *testing.B) {
 	for i := 0; i < b.N; i ++ {
 		u := &YmlParams{}
-		con := New().SetEnv("test")
-		con.ParseFile(u)
+		conf := New().SetEnv("test")
+		conf.ParseFile(u)
 	}
 }
 
 func BenchmarkConfig_YAML(b *testing.B) {
 	for i := 0; i < b.N; i ++ {
 		u := &YmlParams{}
-		con := New().SetEnv("test")
-		con.YAML("config/test/config.yml", u)
+		conf := New().SetEnv("test")
+		conf.YAML("config/test/config.yml", u)
 	}
 }
 
 func BenchmarkConfig_TOML(b *testing.B) {
 	for i := 0; i < b.N; i ++ {
 		u := &TomlParams{}
-		con := New().SetEnv("test")
-		con.TOML("config/test/config.toml", u)
+		conf := New().SetEnv("test")
+		conf.TOML("config/test/config.toml", u)
 	}
 }
+
+func ExampleNew() {
+	conf := New()
+	fmt.Printf("%#v", conf)
+}
+
+func ExampleConfig_SetEnv() {
+	conf := New().SetEnv("test")
+	fmt.Printf("%#v", conf)
+	// Output: &config.Config{Env:"test", ConfigFileDir:"config", ConfigFileType:"toml", ConfigFileName:"config"}
+}
+
+func ExampleConfig_SetConfigFileDir() {
+	conf := New().SetConfigFileDir("config")
+	fmt.Printf("%#v", conf)
+	// Output: &config.Config{Env:"test", ConfigFileDir:"config", ConfigFileType:"toml", ConfigFileName:"config"}
+}
+
+func ExampleConfig_SetConfigFileType() {
+	conf := New().SetConfigFileType("yml")
+	fmt.Printf("%#v", conf)
+	// Output: &config.Config{Env:"test", ConfigFileDir:"config", ConfigFileType:"yml", ConfigFileName:"config"}
+}
+
+func ExampleConfig_SetConfigFileName() {
+	conf := New().SetConfigFileName("config")
+	fmt.Printf("%#v", conf)
+	// Output: &config.Config{Env:"test", ConfigFileDir:"config", ConfigFileType:"yml", ConfigFileName:"config"}
+}
+
+func ExampleConfig_ParseFile() {
+	conf := New().SetEnv("test")
+	u := &YmlParams{}
+	conf.ParseFile(u)
+	fmt.Printf("%#v", u)
+	// Output: &config.YmlParams{User:"taochen"}
+}
+
+func ExampleConfig_ParseFile2() {
+	conf := New().SetEnv("test").SetConfigFileType("toml")
+	u := &TomlParams{}
+	conf.ParseFile(u)
+	fmt.Printf("%#v", u)
+	// Output: &config.TomlParams{Owner:struct { User string "json:\"user\"" }{User:"taochen"}}
+	}

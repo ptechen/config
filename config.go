@@ -27,23 +27,26 @@ type Config struct {
 
 var con *Config
 var once sync.Once
+var onceFlag sync.Once
+var env string
+var configFileDir string
+var configFileType string
+var configFileName string
 // Flag are arguments passed from outside the program.
 //
 func Flag() *Config {
-	var env string
-	var configFileDir string
-	var configFileType string
-	var configFileName string
-	flag.StringVar(&env, "e", "dev", "Operating environment")
-	flag.StringVar(&configFileDir, "cfd", "config", "Configuration file directory")
-	flag.StringVar(&configFileType, "cft", "yml", "Configuration file suffix")
-	flag.StringVar(&configFileName, "cfn", "config", "Configuration file name")
-	flag.Parse()
-	con = New()
-	con.Env = env
-	con.ConfigFileDir = configFileDir
-	con.ConfigFileType = configFileType
-	con.ConfigFileName = configFileName
+	onceFlag.Do(func() {
+		flag.StringVar(&env, "e", "dev", "Operating environment")
+		flag.StringVar(&configFileDir, "cfd", "config", "Configuration file directory")
+		flag.StringVar(&configFileType, "cft", "yml", "Configuration file suffix")
+		flag.StringVar(&configFileName, "cfn", "config", "Configuration file name")
+		flag.Parse()
+		con = New()
+		con.Env = env
+		con.ConfigFileDir = configFileDir
+		con.ConfigFileType = configFileType
+		con.ConfigFileName = configFileName
+	})
 	return con
 }
 
